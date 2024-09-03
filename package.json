@@ -2,7 +2,7 @@
   "name": "handlebars",
   "version": "5.0.0-alpha.1",
   "description": "Handlebars provides the power necessary to let you build semantic templates effectively with no frustration",
-  "homepage": "https://www.handlebarsjs.com/",
+  "homepage": "https://handlebarsjs.com/",
   "keywords": [
     "handlebars",
     "mustache",
@@ -17,7 +17,7 @@
   "license": "MIT",
   "readmeFilename": "README.markdown",
   "engines": {
-    "node": ">=12"
+    "node": ">=18"
   },
   "dependencies": {
     "@handlebars/parser": "^2.1.0",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@definitelytyped/dtslint": "^0.0.100",
-    "@playwright/test": "^1.27.1",
+    "@playwright/test": "^1.36.1",
     "aws-sdk": "^2.1.49",
     "babel-loader": "^5.0.0",
     "babel-runtime": "^5.1.10",
@@ -41,7 +41,7 @@
     "dirty-chai": "^2.0.1",
     "dustjs-linkedin": "^2.0.2",
     "eslint": "^8.25.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^8.9.0",
     "eslint-plugin-compat": "4.0",
     "fs-extra": "^8.1.0",
     "grunt": "^1.0.4",
@@ -62,7 +62,7 @@
     "mock-stdin": "^0.3.0",
     "mustache": "^2.1.3",
     "nyc": "^14.1.1",
-    "prettier": "^2.7.1",
+    "prettier": "^3.0.0",
     "semver": "^5.0.1",
     "sinon": "^7.5.0",
     "typescript": "^3.4.3",
@@ -79,17 +79,19 @@
   },
   "scripts": {
     "build": "grunt build",
-    "format": "prettier --write '**/*.js' && eslint --fix .",
+    "release": "grunt release",
+    "publish:aws": "npm run test:tasks && grunt && grunt publish-to-aws",
+    "format": "prettier --write '**/*.{js,css,json,md}' && eslint --fix .",
     "lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:types",
     "lint:eslint": "eslint --max-warnings 0 .",
     "lint:prettier": "prettier --check '**/*.js'",
     "lint:types": "dtslint types",
     "test": "npm run test:mocha",
     "test:mocha": "grunt build && grunt test",
-    "test:browser": "playwright test --config tests/browser/playwright.config.js tests/browser/spec.js",
+    "test:tasks": "mocha tasks/tests/",
+    "test:browser": "playwright test --config tests/browser/playwright.config.js",
     "test:integration": "grunt integration-tests",
     "test:serve": "grunt connect:server:keepalive",
-    "extensive-tests-and-publish-to-aws": "npx mocha tasks/tests/ && grunt --stack extensive-tests-and-publish-to-aws",
     "--- combined tasks ---": "",
     "check-before-pull-request": "concurrently --kill-others-on-fail npm:lint npm:test"
   },
@@ -125,7 +127,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,css,json}": [
+    "*.{js,css,json,md}": [
       "prettier --write",
       "git add"
     ],

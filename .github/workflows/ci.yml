@@ -12,43 +12,18 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Lint
         run: npm run lint
-
-  dependencies:
-    name: Test (dependencies)
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          # Node 14 ships with npm v6, which doesn't install peer-dependencies by default.
-          # Starting with npm v7 (which is shipped with Node >= 16), peer-dependencies are
-          # automatically installed. So this test (check for unmet peer-dependencies) only
-          # works with Node <= 14.
-          node-version: '14'
-
-      # Simulate an installation by a dependent package
-      - name: Install dependencies
-        run: |
-          rm package-lock.json
-          npm install --production
-
-      - name: Check dependency tree
-        run: npm ls
 
   test:
     name: Test (Node)
@@ -58,16 +33,16 @@ jobs:
       matrix:
         operating-system: ['ubuntu-latest', 'windows-latest']
         # https://nodejs.org/en/about/releases/
-        node-version: ['12', '14', '16', '18']
+        node-version: ['18', '20']
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: true
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -85,17 +60,17 @@ jobs:
 
   browser:
     name: Test (Browser)
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-22.04'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: true
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install dependencies
         run: npm ci
